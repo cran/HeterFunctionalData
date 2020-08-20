@@ -1,0 +1,15 @@
+18976c67ec237137a4e5a38a913c06a6 *DESCRIPTION
+1356d6695c0792221a11590280d73c34 *NAMESPACE
+5c121b96b0fd4a62908a93c808d37bbb *R/functions.R
+ac3ffc2212487f21d6da0326592392ec *man/CF.Rd
+007b2f2bb23e428887a11bee4bbf1e91 *man/Heter.test.Rd
+81aed11302da8a355ed91248de53295f *man/NorRanGen.Rd
+64e3cea5d1a2c23c13726f3bdeb70991 *man/cov_squared_jackknife.Rd
+80600dc224a05f169b3c0e980069e3db *man/dataformat_wide_to_long.Rd
+3e2ffc4615613c75a17edb3323521b5e *man/eu.Rd
+3862f9aa28c470667d76cfb92393fa1e *man/fun.sigijj12.Rd
+aa02a4e804979afd9a27676255518897 *man/sigma4.Rd
+2d4ca257816ae829993d5f5cc3c6b36a *man/sigma4bootstrap.Rd
+1e167663831663f4e2dbb25530bd020e *man/sigma4jackknife.Rd
+1a08b0c7c033f23b6d45649a404d8529 *man/taufun.Rd
+8e3ae3a535bd8512ba1494d3ccb44971 *man/tcontrast.Rd
