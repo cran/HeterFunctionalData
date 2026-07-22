@@ -2,21 +2,26 @@
 % Please edit documentation in R/functions.R
 \name{sigma4}
 \alias{sigma4}
-\title{Unbiased estimate of squared variance $sigma^4$ based on U-statistic of an i.i.d. sample}
+\title{Unbiased estimate of squared variance sigma^4 using C routine}
 \usage{
-sigma4(x)
+sigma4(y)
 }
 \arguments{
-\item{x}{is a vector of i.i.d. observations.}
+\item{y}{a numeric vector}
 }
 \value{
-unbiased estimate of squared variance $sigma^4$, where $sigma^2$ is the variance.
+a numeric value
 }
 \description{
-This function takes a random sample and produces an unbiased estimate of the squared variance based on
-the U-statistic $sum_{k1 ne k2 ne k3 ne k4} (x_{k1}-x_{k2)})^2 (x_{k3}-x_{k4)})^2$.
+To calculate unbiased estimate of \eqn{\sigma^4} using C routine sigma4c. This
+version gives the same return result as sigma4R but is much faster than sigma4R for large n.
 }
 \examples{
-  x=stats::rnorm(10)
-  sigma4(x)
+{
+\dontrun{
+  y = rnorm(10)
+  sigma4(y)
+ }
+}
+
 }

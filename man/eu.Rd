@@ -8,8 +8,8 @@ eu(x, coln, Rij, Rik)
 }
 \arguments{
 \item{x}{the data matrix in long format, whose first column gives the index i, 2nd columns given the index j, 3rd column gives the index k,
-and the last column gives the observation $x_{ijk}$.
-For given i and j,  $x_{ijk}, k=1, ..., n_{ij}$ are assumed to be i.i.d. from the same distribution.}
+and the last column gives the observation \eqn{x_{ijk}}.
+For given i and j, \eqn{x_{ijk}, k=1, ..., n_{ij}} are assumed to be i.i.d. from the same distribution.}
 
 \item{coln}{takes value 4 or 5. If coln=4, the calculation uses original data;  if coln=5, the calculation uses rank. The  default value for coln is 5.}
 
@@ -21,5 +21,5 @@ For given i and j,  $x_{ijk}, k=1, ..., n_{ij}$ are assumed to be i.i.d. from th
 The residual to be used in Heter.test()
 }
 \description{
-This function calcualtes the residual $x_{ijk}-bar{x}_{ij.}$ for the kth replication from the ith group at jth time point.
+This function calcualtes the residual \eqn{x_{ijk}-\bar{x}_{ij.}} for the kth replication from the ith group at jth time point.
 }

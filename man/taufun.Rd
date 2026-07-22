@@ -23,7 +23,7 @@ taufun(u, ranks, d1, d2, d3, a, b, mn, mcon, coln)
 
 \item{mn}{The vector of sample sizes in treatments.}
 
-\item{mcon}{a vector corresponds to $b^h$ in Theorem 3.2 of Wand and Akritas (2010a)}
+\item{mcon}{a vector corresponds to \eqn{b^h} in Theorem 3.2 of Wand and Akritas (2010a)}
 
 \item{coln}{takes value 4 or 5. Value 4 is for the tests based on original data
 and value 5 is for the tests based on ranks.}

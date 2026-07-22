@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{sigma4jackknife}
 \alias{sigma4jackknife}
-\title{Jackknife estimate of $sigma^4$ using an i.i.d. sample}
+\title{Jackknife estimate of sigma^4 using an i.i.d. sample}
 \usage{
 sigma4jackknife(x)
 }
@@ -10,7 +10,7 @@ sigma4jackknife(x)
 \item{x}{is a vector of i.i.d. observations.}
 }
 \value{
-Jackknife estimate of $sigma^4$, where $sigma^2$ is the variance.
+Jackknife estimate of \eqn{\sigma^4}, where \eqn{\sigma^2} is the variance.
 }
 \description{
 This function takes a random sample and approximates an unbiased estimate of the squared variance based on

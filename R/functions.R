@@ -115,11 +115,11 @@ NorRanGen=function(m, sigmaj =stats::runif(m, 1.2, 1.4)){
 
 #' A function to calaculate cell residues.
 #'
-#' This function calcualtes the residual $x_{ijk}-bar{x}_{ij.}$ for the kth replication from the ith group at jth time point.
+#' This function calcualtes the residual \eqn{x_{ijk}-\bar{x}_{ij.}} for the kth replication from the ith group at jth time point.
 #'
 #' @param x the data matrix in long format, whose first column gives the index i, 2nd columns given the index j, 3rd column gives the index k,
-#' and the last column gives the observation $x_{ijk}$.
-#' For given i and j,  $x_{ijk}, k=1, ..., n_{ij}$ are assumed to be i.i.d. from the same distribution.
+#' and the last column gives the observation \eqn{x_{ijk}}.
+#' For given i and j, \eqn{x_{ijk}, k=1, ..., n_{ij}} are assumed to be i.i.d. from the same distribution.
 #'
 #' @param coln takes value 4 or 5. If coln=4, the calculation uses original data;  if coln=5, the calculation uses rank. The  default value for coln is 5.
 #' @param Rij is the mean of all observations in ith treatment at jth measurement calculated in other functions
@@ -150,23 +150,23 @@ eu<-function(x, coln, Rij, Rik){
 
 
 
-#'  Unbiased estimate of  $sigma_{ijj1}^2$
+#' Unbiased estimate of sigma_ijj1^2 and sigma_ijj*sigma_ij1j1 calculated in R
 #'
-#' This function calculatess an unbiased estimate of  $sigma_{ijj1}^2$ using the u-statisitic of vectors
-#' $x=(x_1, x_2, ..., x_{ni})$ and  $y=(y_1, y_2, ..., y_{ni})$,
-#'  where $X_j$ and $Y_j$ are correlated, but $X_j$ and $Y_{j1}$ are independent if $j ne j1$.
-#' Note: $sum_{k1 ne k2 ne k3 ne k4} (x_{k1}-x_{k2)})(y_{k1}-y_{k2)}) (x_{k3}-x_{k4)}) (y_{k3}-y_{k4)})$ is an
-#' unbiased est. of  $4*ni*(ni-1)*(ni-2)*(ni-3) [E(X_{ijk}-mu_{ij} u_{ij1k}) ]^2$.
+#' This function calculates an unbiased estimate of \eqn{\sigma_{ijj1}^2} using the u-statisitic of vectors
+#' \eqn{x=(x_1, x_2, ..., x_{ni})} and \eqn{y=(y_1, y_2, ..., y_{ni})},
+#' where \eqn{X_j} and \eqn{Y_j} are correlated, but \eqn{X_j} and \eqn{Y_{j1}} are independent if \eqn{j \ne j1}.
+#' Note: \deqn{\sum_{k1 \ne k2 \ne k3 \ne k4} (x_{k1}-x_{k2})(y_{k1}-y_{k2}) (x_{k3}-x_{k4}) (y_{k3}-y_{k4})}
+#' is an unbiased est. of \eqn{4 n_i (n_i-1)(n_i-2)(n_i-3) [E(X_{ijk}-\mu_{ij}) u_{ij1k}) ]^2}.
 #'
 #' @param x a vector
 #' @param y  a vector
 #'
 #' @return A list containing two variables sigmaijj12 and ssijj1 in it.
-#'       The sigmaijj12 variable gives an unbiased estimate of $sigma_{ijj1}^2$.
-#'       The ssijj1 variable gives an unbiased estimate of $sigma_{ijj} sigma_{ij_1j_1}$.
+#'       The sigmaijj12 variable gives an unbiased estimate of \eqn{\sigma_{ijj1}^2}.
+#'       The ssijj1 variable gives an unbiased estimate of \eqn{\sigma_{ijj} \sigma_{ij_1j_1}}.
 #'
-#'
-fun.sigijj12<-function(x, y){
+#' @export
+fun.sigijj12R<-function(x, y){
         ni<-length(x)
 	sigmaijj12<- 0
         ssijj1<- 0
@@ -187,6 +187,36 @@ fun.sigijj12<-function(x, y){
 	 result
 }
 
+
+#' Unbiased estimate of sigma_ijj1^2 and sigma_ijj*sigma_ij1j1 using C routine
+#'
+#' This function calculates an unbiased estimate of \eqn{\sigma_{ijj1}^2} using the u-statisitic of vectors
+#' \eqn{x=(x_1, x_2, ..., x_{ni})} and \eqn{y=(y_1, y_2, ..., y_{ni})},
+#' where \eqn{X_j} and \eqn{Y_j} are correlated, but \eqn{X_j} and \eqn{Y_{j1}} are independent if \eqn{j \ne j1}.
+#' Note: \deqn{\sum_{k1 \ne k2 \ne k3 \ne k4} (x_{k1}-x_{k2})(y_{k1}-y_{k2}) (x_{k3}-x_{k4}) (y_{k3}-y_{k4})}
+#' is an unbiased est. of \eqn{4 n_i (n_i-1)(n_i-2)(n_i-3) [E(X_{ijk}-\mu_{ij}) u_{ij1k}) ]^2}.
+#' This function is much faster if fun.sigijj12
+#'
+#' @param x a vector
+#' @param y  a vector
+#'
+#' @return A list containing two variables sigmaijj12 and ssijj1 in it.
+#'       The sigmaijj12 variable gives an unbiased estimate of \eqn{\sigma_{ijj1}^2}.
+#'       The ssijj1 variable gives an unbiased estimate of \eqn{\sigma_{ijj} \sigma_{ij_1j_1}}.
+#'
+#' @export
+sigijj12C <- function(x, y){
+  sigmaijj12 <-0
+  ssijj1 <- 0
+  if (length(x) != length(y)) {
+    print('x and y must have identical length.')
+  } else{
+    temp = .C("sigijj12", as.integer(length(y)), as.double(x), as.double(y), as.double(sigmaijj12), as.double(ssijj1), PACKAGE ='HeterFunctionalData')
+    return(list(sigmaijj12=temp[[4]], ssijj1 =temp[[5]] ))
+  }
+}
+
+
 #' An intermediate function to calculate the partial sums
 #'
 #' This function is internally used to calculate the partial sums which will
@@ -201,7 +231,7 @@ fun.sigijj12<-function(x, y){
 #' @param a The number of treatments.
 #' @param b The number of time points or repeated measurements per subject.
 #' @param mn The vector of sample sizes in treatments.
-#' @param mcon a vector corresponds to $b^h$ in Theorem 3.2 of Wand and Akritas (2010a)
+#' @param mcon a vector corresponds to \eqn{b^h} in Theorem 3.2 of Wand and Akritas (2010a)
 #' @param coln takes value 4 or 5. Value 4 is for the tests based on original data
 #'             and value 5 is for the tests based on ranks.
 #'
@@ -570,21 +600,21 @@ CF<-function(data,a,b, mn){
 
 
 
-#' Unbiased estimate of squared variance $sigma^4$ based on U-statistic of an i.i.d. sample
+#' Unbiased estimate of squared variance sigma^4 based on U-statistic of an i.i.d. sample
 #'
 #' This function takes a random sample and produces an unbiased estimate of the squared variance based on
-#' the U-statistic $sum_{k1 ne k2 ne k3 ne k4} (x_{k1}-x_{k2)})^2 (x_{k3}-x_{k4)})^2$.
+#' the U-statistic \deqn{\sum_{k1 \ne k2 \ne k3 \ne k4} (x_{k1}-x_{k2})^2 (x_{k3}-x_{k4})^2}. The calculation is in R, which may be slow for large n.
 #'
 #' @param x is a vector of i.i.d. observations.
 #'
-#' @return unbiased estimate of squared variance $sigma^4$, where $sigma^2$ is the variance.
+#' @return unbiased estimate of squared variance \eqn{\sigma^4}, where \eqn{\sigma^2} is the variance.
 #'
 #' @export
 #'
 #' @examples
 #'   x=stats::rnorm(10)
-#'   sigma4(x)
-sigma4<-function(x){
+#'   sigma4R(x)
+sigma4R<-function(x){
   nij<-length(x)
   sigmaij4<- 0
   for (m1 in 1:nij){
@@ -601,16 +631,42 @@ sigma4<-function(x){
   sigmaij4
 }
 
+
+
+#' Unbiased estimate of squared variance sigma^4 using C routine
+#'
+#' To calculate unbiased estimate of \eqn{\sigma^4} using C routine sigma4c. This
+#' version gives the same return result as sigma4R but is much faster than sigma4R for large n.
+#'
+#' @param y a numeric vector
+#' @return a numeric value
+#'
+#' @useDynLib HeterFunctionalData, sigma4c
+#'
+#' @examples{
+#' \dontrun{
+#'   y = rnorm(10)
+#'   sigma4(y)
+#'  }
+#' }
+#'
+#' @export
+sigma4 = function(y){
+  res =0
+  temp = .C("sigma4c", as.integer(length(y)), as.double(y), as.double(res), PACKAGE ='HeterFunctionalData')
+  return(temp[[3]])
+}
+
 thetahat<-function(x) (mean((x-mean(x))^2 ))^2
 
-#' Jackknife estimate of $sigma^4$ using an i.i.d. sample
+#' Jackknife estimate of sigma^4 using an i.i.d. sample
 #'
 #' This function takes a random sample and approximates an unbiased estimate of the squared variance based on
 #' Jackknife estimate.
 #'
 #' @param x is a vector of i.i.d. observations.
 #'
-#' @return  Jackknife estimate of $sigma^4$, where $sigma^2$ is the variance.
+#' @return  Jackknife estimate of \eqn{\sigma^4}, where \eqn{\sigma^2} is the variance.
 #'
 #' @export
 #'
@@ -626,14 +682,14 @@ sigma4jackknife<-function(x){
         result
         }
 
-#' Bootstrap estimate of $sigma^4$ using an i.i.d. sample
+#' Bootstrap estimate of sigma^4 using an i.i.d. sample
 #'
 #' This function takes a random sample and approximates an unbiased estimate of the squared variance based on
 #' Bootstrap estimate.
 #'
 #' @param x is a vector of i.i.d. observations.
 #'
-#' @return  Bootstrap estimate of $ sigma^4$, where $sigma^2$ is the variance.
+#' @return  Bootstrap estimate of \eqn{\sigma^4}, where \eqn{\sigma^2} is the variance.
 #'
 #' @export
 #'

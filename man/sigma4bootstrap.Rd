@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{sigma4bootstrap}
 \alias{sigma4bootstrap}
-\title{Bootstrap estimate of $sigma^4$ using an i.i.d. sample}
+\title{Bootstrap estimate of sigma^4 using an i.i.d. sample}
 \usage{
 sigma4bootstrap(x)
 }
@@ -10,7 +10,7 @@ sigma4bootstrap(x)
 \item{x}{is a vector of i.i.d. observations.}
 }
 \value{
-Bootstrap estimate of $ sigma^4$, where $sigma^2$ is the variance.
+Bootstrap estimate of \eqn{\sigma^4}, where \eqn{\sigma^2} is the variance.
 }
 \description{
 This function takes a random sample and approximates an unbiased estimate of the squared variance based on
